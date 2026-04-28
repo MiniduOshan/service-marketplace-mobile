@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'welcome_screen.dart'; // Import the next screen
 
 class OnboardingData {
   final String title;
@@ -9,8 +10,10 @@ class OnboardingData {
 }
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   @override
-  _OnboardingScreenState createState() => _OnboardingScreenState();
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
@@ -54,15 +57,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
+        leading: const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Icon(Icons.grid_view_rounded, color: Color(0xFF006D44)),
         ),
-        title: Text("SkilledLK", style: TextStyle(color: Color(0xFF006D44), fontWeight: FontWeight.bold)),
+        title: const Text("SkilledLK", style: TextStyle(color: Color(0xFF006D44), fontWeight: FontWeight.bold)),
         actions: [
           TextButton(
-            onPressed: () {}, 
-            child: Text("Skip", style: TextStyle(color: Colors.grey)),
+            onPressed: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WelcomeScreen()));
+            }, 
+            child: const Text("Skip", style: TextStyle(color: Colors.grey)),
           )
         ],
       ),
@@ -83,13 +88,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: Column(
                     children: [
                       Image.asset(onboardingContents[i].image, height: 250),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
                       Text(
                         onboardingContents[i].title,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text(
                         onboardingContents[i].description,
                         textAlign: TextAlign.center,
@@ -110,22 +115,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           Container(
             height: 55,
-            margin: EdgeInsets.all(40),
+            margin: const EdgeInsets.all(40),
             width: double.infinity,
             child: ElevatedButton(
-              child: Text(
-                currentIndex == onboardingContents.length - 1 ? "Get Started" : "Continue",
-                style: TextStyle(color: Colors.white),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF006D44),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: () {
                 if (currentIndex == onboardingContents.length - 1) {
-                   // Add navigation to Login here
+                  // NAVIGATION LOGIC
+                  Navigator.pushReplacement(
+                    context, 
+                    MaterialPageRoute(builder: (context) => const WelcomeScreen())
+                  );
+                } else {
+                  _controller.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
                 }
-                _controller.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeIn);
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF006D44),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: Text(
+                currentIndex == onboardingContents.length - 1 ? "Get Started" : "Continue",
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           )
@@ -138,10 +148,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Container(
       height: 8,
       width: currentIndex == index ? 20 : 8,
-      margin: EdgeInsets.only(right: 5),
+      margin: const EdgeInsets.only(right: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: currentIndex == index ? Color(0xFF006D44) : Colors.grey[300],
+        color: currentIndex == index ? const Color(0xFF006D44) : Colors.grey[300],
       ),
     );
   }
