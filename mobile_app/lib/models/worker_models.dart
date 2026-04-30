@@ -10,7 +10,9 @@ class Worker {
   final String id;
   final String name;
   final String specialty;
+  final String location;
   final double rating;
+  final int reviewCount;
   final int experience;
   final double distance;
   final String startingPrice;
@@ -18,12 +20,16 @@ class Worker {
   final String imageUrl;
   final bool isVerified;
   final String initial; 
+  final bool isFeatured;
+  final bool isPro;
 
   Worker({
     required this.id,
     required this.name,
     required this.specialty,
+    required this.location,
     required this.rating,
+    required this.reviewCount,
     required this.experience,
     required this.distance,
     required this.startingPrice,
@@ -31,5 +37,7 @@ class Worker {
     this.imageUrl = "", 
     this.isVerified = true,
     required this.initial,
+    this.isFeatured = false,
+    this.isPro = false,
   });
 }
