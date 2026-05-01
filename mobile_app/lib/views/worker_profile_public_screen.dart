@@ -21,7 +21,7 @@ class WorkerProfilePublicScreen extends StatelessWidget {
           children: [
             _buildHeader(),
             _buildStats(),
-            _buildPackages(),
+            _buildPackages(context),
             _buildAbout(),
             _buildPortfolio(),
             _buildLocation(),
@@ -30,7 +30,7 @@ class WorkerProfilePublicScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomSheet: _buildBottomActions(),
+      bottomSheet: _buildBottomActions(context),
     );
   }
 
@@ -91,7 +91,7 @@ class WorkerProfilePublicScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPackages() {
+  Widget _buildPackages(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -103,11 +103,11 @@ class WorkerProfilePublicScreen extends StatelessWidget {
             decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade200), borderRadius: BorderRadius.circular(16)),
             child: Column(
               children: [
-                _packageTile("Room painting", "LKR 5,000"),
+                _packageTile(context, "Room painting", "LKR 5,000"),
                 const Divider(height: 1),
-                _packageTile("Full house (3BR)", "LKR 35,000"),
+                _packageTile(context, "Full house (3BR)", "LKR 35,000"),
                 const Divider(height: 1),
-                _packageTile("Custom quote", "Negotiable", isNegotiable: true),
+                _packageTile(context, "Custom quote", "Negotiable", isNegotiable: true),
               ],
             ),
           ),
@@ -116,13 +116,13 @@ class WorkerProfilePublicScreen extends StatelessWidget {
     );
   }
 
-  Widget _packageTile(String title, String price, {bool isNegotiable = false}) {
+  Widget _packageTile(BuildContext context, String title, String price, {bool isNegotiable = false}) {
     return ListTile(
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Text(price, style: TextStyle(color: isNegotiable ? Colors.green : Colors.black, fontWeight: FontWeight.bold)),
       trailing: OutlinedButton(
         style: OutlinedButton.styleFrom(side: const BorderSide(color: primaryGreen)),
-        onPressed: (){}, 
+        onPressed: () => Navigator.pushNamed(context, '/booking-steps'),
         child: const Text("Select", style: TextStyle(color: primaryGreen))
       ),
     );
@@ -192,14 +192,14 @@ class WorkerProfilePublicScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomActions() {
+  Widget _buildBottomActions(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(color: Colors.white, border: Border(top: BorderSide(color: Color(0xFFF1F4F9)))),
       child: Row(children: [
-        Expanded(child: OutlinedButton(onPressed: (){}, child: const Text("Chat first"))),
+        Expanded(child: OutlinedButton(onPressed: () => Navigator.pushNamed(context, '/chat'), child: const Text("Chat first"))),
         const SizedBox(width: 10),
-        Expanded(child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: primaryGreen), onPressed: (){}, child: const Text("Book now", style: TextStyle(color: Colors.white)))),
+        Expanded(child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: primaryGreen), onPressed: () => Navigator.pushNamed(context, '/booking-steps'), child: const Text("Book now", style: TextStyle(color: Colors.white)))),
       ]),
     );
   }

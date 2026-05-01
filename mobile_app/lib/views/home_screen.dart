@@ -212,47 +212,50 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildTopRatedCard(Worker worker) {
-    return Container(
-      width: 170,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white, borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE9F1EE)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CircleAvatar(backgroundColor: const Color(0xFFE8F6F1), child: Text(worker.initial, style: const TextStyle(color: primaryGreen))),
-              _buildBadge("Verified", Colors.green),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(worker.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16), maxLines: 1),
-          Text(worker.specialty, style: const TextStyle(color: Colors.grey, fontSize: 13)),
-          const Spacer(),
-          Row(
-            children: [
-              const Icon(Icons.star, color: Colors.amber, size: 16),
-              Text(" ${worker.rating}", style: const TextStyle(fontWeight: FontWeight.bold)),
-              const Spacer(),
-              Text("${worker.distance}km", style: const TextStyle(color: Colors.grey, fontSize: 12)),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text("LKR ${worker.startingPrice}", style: const TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity, height: 32,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(backgroundColor: primaryGreen, shape: const StadiumBorder()),
-              child: const Text("Book", style: TextStyle(color: Colors.white, fontSize: 12)),
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, '/worker-profile-public'),
+      child: Container(
+        width: 170,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE9F1EE)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CircleAvatar(backgroundColor: const Color(0xFFE8F6F1), child: Text(worker.initial, style: const TextStyle(color: primaryGreen))),
+                _buildBadge("Verified", Colors.green),
+              ],
             ),
-          )
-        ],
+            const SizedBox(height: 12),
+            Text(worker.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16), maxLines: 1),
+            Text(worker.specialty, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+            const Spacer(),
+            Row(
+              children: [
+                const Icon(Icons.star, color: Colors.amber, size: 16),
+                Text(" ${worker.rating}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                const Spacer(),
+                Text("${worker.distance}km", style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text("LKR ${worker.startingPrice}", style: const TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity, height: 32,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/booking-steps'),
+                style: ElevatedButton.styleFrom(backgroundColor: primaryGreen, shape: const StadiumBorder()),
+                child: const Text("Book", style: TextStyle(color: Colors.white, fontSize: 12)),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -275,43 +278,46 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildFeaturedTile(Worker worker) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white, borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE9F1EE)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 70, height: 70,
-            decoration: BoxDecoration(color: placeholderBg, borderRadius: BorderRadius.circular(12)),
-            child: const Icon(Icons.engineering_outlined, color: Colors.grey),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(worker.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                Text("${worker.specialty} • ${worker.experience} yrs", style: const TextStyle(color: Colors.grey, fontSize: 13)),
-                Text("LKR ${worker.startingPrice}/${worker.priceUnit}", style: const TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)),
-              ],
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, '/worker-profile-public'),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE9F1EE)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 70, height: 70,
+              decoration: BoxDecoration(color: placeholderBg, borderRadius: BorderRadius.circular(12)),
+              child: const Icon(Icons.engineering_outlined, color: Colors.grey),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(children: [const Icon(Icons.star, color: Colors.amber, size: 16), Text(" ${worker.rating}")]),
-              const SizedBox(height: 12),
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(side: const BorderSide(color: primaryGreen), shape: const StadiumBorder()),
-                child: const Text("View", style: TextStyle(color: primaryGreen)),
-              )
-            ],
-          )
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(worker.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text("${worker.specialty} • ${worker.experience} yrs", style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                  Text("LKR ${worker.startingPrice}/${worker.priceUnit}", style: const TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(children: [const Icon(Icons.star, color: Colors.amber, size: 16), Text(" ${worker.rating}")]),
+                const SizedBox(height: 12),
+                OutlinedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/worker-profile-public'),
+                  style: OutlinedButton.styleFrom(side: const BorderSide(color: primaryGreen), shape: const StadiumBorder()),
+                  child: const Text("View", style: TextStyle(color: primaryGreen)),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

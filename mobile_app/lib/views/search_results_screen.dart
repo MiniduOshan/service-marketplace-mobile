@@ -162,86 +162,89 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
   }
 
   Widget _buildWorkerCard(Worker worker) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 35,
-                  backgroundColor: primaryGreen,
-                  child: Text(worker.initial, style: const TextStyle(color: Colors.white, fontSize: 24)),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(worker.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          _badge("Verified", Colors.green, Icons.check_circle),
-                          if (worker.isFeatured) const SizedBox(width: 8),
-                          if (worker.isFeatured) _badge("Featured", Colors.orange, Icons.star),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text("${worker.specialty} · ${worker.location} · ${worker.experience} yrs exp",
-                        style: const TextStyle(color: Colors.grey, fontSize: 13)),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          const Icon(Icons.star, color: Colors.amber, size: 18),
-                          const SizedBox(width: 4),
-                          Text("${worker.rating} (${worker.reviewCount} reviews)", 
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
-                          const Spacer(),
-                          Text("${worker.distance} km away", style: const TextStyle(color: Colors.grey)),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Text("From LKR ${worker.startingPrice} / ${worker.priceUnit}",
-                        style: const TextStyle(color: primaryGreen, fontWeight: FontWeight.bold, fontSize: 16)),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(child: OutlinedButton(onPressed: () {}, child: const Text("Chat first"))),
-                          const SizedBox(width: 12),
-                          Expanded(child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(backgroundColor: primaryGreen),
-                            onPressed: () {}, 
-                            child: const Text("Book now", style: TextStyle(color: Colors.white)))),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (worker.isPro) ...[
-            const Divider(height: 1),
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, '/worker-profile-public'),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade200),
+        ),
+        child: Column(
+          children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              padding: const EdgeInsets.all(16),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.circle, size: 8, color: Colors.amber.shade700),
-                  const SizedBox(width: 8),
-                  Text("PRO MEMBER", style: TextStyle(color: Colors.amber.shade900, fontWeight: FontWeight.bold, fontSize: 12)),
+                  CircleAvatar(
+                    radius: 35,
+                    backgroundColor: primaryGreen,
+                    child: Text(worker.initial, style: const TextStyle(color: Colors.white, fontSize: 24)),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(worker.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            _badge("Verified", Colors.green, Icons.check_circle),
+                            if (worker.isFeatured) const SizedBox(width: 8),
+                            if (worker.isFeatured) _badge("Featured", Colors.orange, Icons.star),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text("${worker.specialty} · ${worker.location} · ${worker.experience} yrs exp",
+                          style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.star, color: Colors.amber, size: 18),
+                            const SizedBox(width: 4),
+                            Text("${worker.rating} (${worker.reviewCount} reviews)", 
+                              style: const TextStyle(fontWeight: FontWeight.bold)),
+                            const Spacer(),
+                            Text("${worker.distance} km away", style: const TextStyle(color: Colors.grey)),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text("From LKR ${worker.startingPrice} / ${worker.priceUnit}",
+                          style: const TextStyle(color: primaryGreen, fontWeight: FontWeight.bold, fontSize: 16)),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(child: OutlinedButton(onPressed: () => Navigator.pushNamed(context, '/chat'), child: const Text("Chat first"))),
+                            const SizedBox(width: 12),
+                            Expanded(child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(backgroundColor: primaryGreen),
+                              onPressed: () => Navigator.pushNamed(context, '/booking-steps'), 
+                              child: const Text("Book now", style: TextStyle(color: Colors.white)))),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            )
-          ]
-        ],
+            ),
+            if (worker.isPro) ...[
+              const Divider(height: 1),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Row(
+                  children: [
+                    Icon(Icons.circle, size: 8, color: Colors.amber.shade700),
+                    const SizedBox(width: 8),
+                    Text("PRO MEMBER", style: TextStyle(color: Colors.amber.shade900, fontWeight: FontWeight.bold, fontSize: 12)),
+                  ],
+                ),
+              )
+            ]
+          ],
+        ),
       ),
     );
   }
@@ -291,6 +294,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       currentIndex: 0,
       type: BottomNavigationBarType.fixed,
       selectedItemColor: primaryGreen,
+      onTap: (index) {
+        if (index == 0) Navigator.pushNamed(context, '/welcome'); // Home/Welcome
+        if (index == 1) Navigator.pushNamed(context, '/my-bookings');
+        if (index == 2) Navigator.pushNamed(context, '/chat-list');
+        if (index == 3) Navigator.pushNamed(context, '/profile');
+      },
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: "Bookings"),

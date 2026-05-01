@@ -53,8 +53,8 @@ class MyBookingsScreen extends StatelessWidget {
             _buildAllTab(),
             _buildActiveTab(context),
             _buildPendingTab(context),
-            _buildCompletedTab(),
-            _buildCancelledTab(),
+            _buildCompletedTab(context),
+            _buildCancelledTab(context),
           ],
         ),
       ),
@@ -92,7 +92,7 @@ class MyBookingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCompletedTab() {
+  Widget _buildCompletedTab(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -103,12 +103,13 @@ class MyBookingsScreen extends StatelessWidget {
           subtitle: "Completed on 15 April 2025",
           showStars: true,
           actionLabel: "Rebook",
+          context: context,
         ),
       ],
     );
   }
 
-  Widget _buildCancelledTab() {
+  Widget _buildCancelledTab(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -120,6 +121,7 @@ class MyBookingsScreen extends StatelessWidget {
           orderId: "#BK-0988",
           showRefundInfo: true,
           actionLabel: "Details",
+          context: context,
         ),
       ],
     );
@@ -183,11 +185,11 @@ class MyBookingsScreen extends StatelessWidget {
             children: [
               _actionButton(Icons.call, "Call", () {}),
               const SizedBox(width: 8),
-              _actionButton(Icons.chat_bubble_outline, "Chat", () {}),
+              _actionButton(Icons.chat_bubble_outline, "Chat", () => Navigator.pushNamed(context, '/chat')),
               const SizedBox(width: 8),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {}, // For now, track stays as is or navigates to a status view
                   icon: const Icon(Icons.send, color: Colors.white, size: 18),
                   label: const Text("Track", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                   style: ElevatedButton.styleFrom(
@@ -311,6 +313,7 @@ class MyBookingsScreen extends StatelessWidget {
     bool showStars = false,
     bool showRefundInfo = false,
     required String actionLabel,
+    required BuildContext context,
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -351,7 +354,9 @@ class MyBookingsScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (actionLabel == "Rebook") Navigator.pushNamed(context, '/booking-steps');
+              },
               style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
               child: Text(actionLabel, style: const TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)),
             ),
