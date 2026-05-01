@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../controllers/auth_controller.dart'; // To handle logout
+import '../../controllers/auth_controller.dart'; // To handle logout
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});

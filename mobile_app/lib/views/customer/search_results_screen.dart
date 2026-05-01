@@ -1,6 +1,6 @@
 // lib/views/search_results_screen.dart
 import 'package:flutter/material.dart';
-import '../models/worker_models.dart';
+import '../../models/worker_models.dart';
 
 class SearchResultsScreen extends StatefulWidget {
   const SearchResultsScreen({super.key});

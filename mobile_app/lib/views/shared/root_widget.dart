@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart'; // Path to Home Screen.png
-import 'onboarding_screen.dart'; // Path to Onboarding flow
-import 'worker_dashboard.dart'; // Path to Worker Dashboard.png
-import '../controllers/auth_controller.dart';
-import '../models/app_user.dart';
+import '../customer/home_screen.dart'; // Path to Home Screen.png
+import '../onboarding/onboarding_screen.dart'; // Path to Onboarding flow
+import '../worker/worker_dashboard.dart'; // Path to Worker Dashboard.png
+import '../../controllers/auth_controller.dart';
+import '../../models/app_user.dart';
 
 
 class AuthWrapper extends StatelessWidget {

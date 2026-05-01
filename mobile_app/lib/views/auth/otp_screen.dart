@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'worker_dashboard.dart';
-import '../controllers/auth_controller.dart';
-import '../models/app_user.dart';
+import '../worker/worker_dashboard.dart';
+import '../../controllers/auth_controller.dart';
+import '../../models/app_user.dart';
 
 
 class OTPVerificationScreen extends StatefulWidget {

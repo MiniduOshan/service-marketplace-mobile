@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'views/root_widget.dart'; // contains AuthWrapper
+import 'views/shared/root_widget.dart'; // contains AuthWrapper
 
 
 // Importing existing screens for routes
-import 'views/welcome_screen.dart';
-import 'views/login_screen.dart';
-import 'views/signup_screen.dart';
-import 'views/phone_login_screen.dart';
-import 'views/forgot_password_screen.dart';
-import 'views/booking_steps_screen.dart';
-import 'views/cancel_booking_screen.dart';
-import 'views/chat_list_screen.dart';
-import 'views/chat_screen.dart';
-import 'views/document_verification_screen.dart';
-import 'views/job_requests_screen.dart';
-import 'views/my_bookings_screen.dart';
-import 'views/user_profile_screen.dart';
-import 'views/worker_registration_screen.dart';
-import 'views/worker_subscription_screen.dart';
-import 'views/worker_wallet_screen.dart';
-import 'views/search_results_screen.dart';
-import 'views/worker_profile_public_screen.dart';
-import 'views/worker_dashboard.dart';
+import 'views/onboarding/welcome_screen.dart';
+import 'views/auth/login_screen.dart';
+import 'views/auth/signup_screen.dart';
+import 'views/auth/phone_login_screen.dart';
+import 'views/auth/forgot_password_screen.dart';
+import 'views/customer/booking_steps_screen.dart';
+import 'views/customer/cancel_booking_screen.dart';
+import 'views/chat/chat_list_screen.dart';
+import 'views/chat/chat_screen.dart';
+import 'views/worker/document_verification_screen.dart';
+import 'views/worker/job_requests_screen.dart';
+import 'views/customer/my_bookings_screen.dart';
+import 'views/customer/user_profile_screen.dart';
+import 'views/worker/worker_registration_screen.dart';
+import 'views/worker/worker_subscription_screen.dart';
+import 'views/worker/worker_wallet_screen.dart';
+import 'views/customer/search_results_screen.dart';
+import 'views/customer/worker_profile_public_screen.dart';
+import 'views/worker/worker_dashboard.dart';
 
 
 void main() {

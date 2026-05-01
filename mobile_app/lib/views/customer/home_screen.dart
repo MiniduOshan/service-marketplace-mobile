@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/worker_models.dart';
+import '../../models/worker_models.dart';
 import 'search_results_screen.dart'; 
 
 class HomeScreen extends StatefulWidget {
