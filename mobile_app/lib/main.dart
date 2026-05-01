@@ -8,6 +8,20 @@ import 'views/login_screen.dart';
 import 'views/signup_screen.dart';
 import 'views/phone_login_screen.dart';
 import 'views/forgot_password_screen.dart';
+import 'views/booking_steps_screen.dart';
+import 'views/cancel_booking_screen.dart';
+import 'views/chat_list_screen.dart';
+import 'views/chat_screen.dart';
+import 'views/document_verification_screen.dart';
+import 'views/job_requests_screen.dart';
+import 'views/my_bookings_screen.dart';
+import 'views/user_profile_screen.dart';
+import 'views/worker_registration_screen.dart';
+import 'views/worker_subscription_screen.dart';
+import 'views/worker_wallet_screen.dart';
+import 'views/search_results_screen.dart';
+import 'views/worker_profile_public_screen.dart';
+import 'views/worker_dashboard.dart';
 
 
 void main() {
@@ -49,7 +63,20 @@ class SkilledLKApp extends StatelessWidget {
         '/signup': (context) => const SignupScreen(),
         '/phone-login': (context) => const PhoneLoginScreen(),
         '/forgot-password': (context) => const ForgotPasswordScreen(),
-        // Add more specific routes as needed
+        '/booking-steps': (context) => const BookingStepsScreen(),
+        '/cancel-booking': (context) => const CancelBookingScreen(),
+        '/chat-list': (context) => const ChatListScreen(),
+        '/chat': (context) => const ChatScreen(),
+        '/document-verification': (context) => const DocumentVerificationScreen(),
+        '/job-requests': (context) => const JobRequestsScreen(),
+        '/my-bookings': (context) => const MyBookingsScreen(),
+        '/profile': (context) => const UserProfileScreen(),
+        '/worker-registration': (context) => const WorkerRegistrationScreen(),
+        '/worker-subscription': (context) => const WorkerSubscriptionScreen(),
+        '/worker-wallet': (context) => const WorkerWalletScreen(),
+        '/search-results': (context) => const SearchResultsScreen(),
+        '/worker-profile-public': (context) => const WorkerProfilePublicScreen(),
+        '/worker-dashboard': (context) => const WorkerDashboard(),
       },
     );
 

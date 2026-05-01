@@ -198,7 +198,7 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               const Text("THIS MONTH", style: TextStyle(color: Colors.white70, fontSize: 12, letterSpacing: 1, fontWeight: FontWeight.bold)),
-              TextButton(onPressed: () {}, child: const Text("View earnings →", style: TextStyle(color: Colors.white, fontSize: 14, decoration: TextDecoration.underline))),
+              TextButton(onPressed: () => Navigator.pushNamed(context, '/worker-wallet'), child: const Text("View earnings →", style: TextStyle(color: Colors.white, fontSize: 14, decoration: TextDecoration.underline))),
           ]),
           const SizedBox(height: 8),
           const Text("LKR 42,000", style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
@@ -232,7 +232,10 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
       physics: const NeverScrollableScrollPhysics(), // Important for SingleChildScrollView
       crossAxisSpacing: 16, mainAxisSpacing: 16, childAspectRatio: 2.2, // Matches Figma layout
       children: [
-        _buildStatCard("127", "TOTAL JOBS"),
+        GestureDetector(
+          onTap: () => Navigator.pushNamed(context, '/job-requests'),
+          child: _buildStatCard("127", "TOTAL JOBS"),
+        ),
         _buildStatCard("4.9", "RATING"),
         _buildStatCard("LKR 2,500", "SUBSCRIPTION"),
         _buildStatCard("87", "PRIORITY SCORE"),
@@ -255,7 +258,9 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
 
   // Helper for Section Titles and optional badge from Figma
   Widget _buildSectionHeader(String title, {int? badgeCount}) {
-    return Row(children: [
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, '/job-requests'),
+      child: Row(children: [
         Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
         if (badgeCount != null) ...[
           const SizedBox(width: 12),
@@ -263,7 +268,8 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
             decoration: BoxDecoration(color: const Color(0xFFFCE4E4), borderRadius: BorderRadius.circular(12)),
             child: Text("$badgeCount new", style: const TextStyle(color: Color(0xFFD32F2F), fontSize: 12, fontWeight: FontWeight.bold))),
         ],
-    ]);
+      ]),
+    );
   }
 
   // 6. Job Request Card from Figma
@@ -334,7 +340,7 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
                   const SizedBox(width: 12),
                   const Text("Pro Plan • Active", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ]),
-              TextButton(onPressed: () {}, child: const Text("Manage plan", style: TextStyle(color: Color(0xFF1B434D), fontWeight: FontWeight.bold, decoration: TextDecoration.underline))),
+              TextButton(onPressed: () => Navigator.pushNamed(context, '/worker-subscription'), child: const Text("Manage plan", style: TextStyle(color: Color(0xFF1B434D), fontWeight: FontWeight.bold, decoration: TextDecoration.underline))),
           ]),
           const SizedBox(height: 12),
           const Text("Renews May 15 • LKR 2,500/month", style: TextStyle(color: Colors.grey, fontSize: 14)),
@@ -357,13 +363,18 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
   Widget _buildBottomNavigationBar() {
     return Container(decoration: const BoxDecoration(border: Border(top: BorderSide(color: Color(0xFFE9F1EE), width: 1))),
       child: BottomNavigationBar(
-        currentIndex: 0, // Dashboard Active
+        currentIndex: 0,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF006D44),
         unselectedItemColor: Colors.grey,
-        elevation: 0, // Flat look from Figma
+        elevation: 0,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        onTap: (index) {
+          if (index == 1) Navigator.pushNamed(context, '/job-requests');
+          if (index == 2) Navigator.pushNamed(context, '/worker-wallet');
+          if (index == 3) Navigator.pushNamed(context, '/profile');
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: "Dashboard"),
           BottomNavigationBarItem(icon: Icon(Icons.work_outline_rounded), label: "Jobs"),

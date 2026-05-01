@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/worker_models.dart';
-import 'search_results_screen.dart'; // Ensure this file exists in your views folder
+import 'search_results_screen.dart'; 
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Mock Data (To be moved to a Controller later)
+  // Mock Data
   final String customerName = "Nimal";
   final String currentLocation = "Maharagama, Colombo";
 
@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // 3. Search Bar Trigger (Navigates to SearchResultsScreen)
+  // 3. Search Bar Trigger
   Widget _buildSearchBarTrigger() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity, height: 32,
             child: ElevatedButton(
               onPressed: () {},
-              style: ElevatedButton.styleFrom(backgroundColor: primaryGreen, shape: StadiumBorder()),
+              style: ElevatedButton.styleFrom(backgroundColor: primaryGreen, shape: const StadiumBorder()),
               child: const Text("Book", style: TextStyle(color: Colors.white, fontSize: 12)),
             ),
           )
@@ -306,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 12),
               OutlinedButton(
                 onPressed: () {},
-                style: OutlinedButton.styleFrom(side: const BorderSide(color: primaryGreen), shape: StadiumBorder()),
+                style: OutlinedButton.styleFrom(side: const BorderSide(color: primaryGreen), shape: const StadiumBorder()),
                 child: const Text("View", style: TextStyle(color: primaryGreen)),
               )
             ],
@@ -343,6 +343,11 @@ class _HomeScreenState extends State<HomeScreen> {
       currentIndex: 0,
       type: BottomNavigationBarType.fixed,
       selectedItemColor: primaryGreen,
+      onTap: (index) {
+        if (index == 1) Navigator.pushNamed(context, '/my-bookings');
+        if (index == 2) Navigator.pushNamed(context, '/chat-list');
+        if (index == 3) Navigator.pushNamed(context, '/profile');
+      },
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "Bookings"),
