@@ -1,5 +1,6 @@
 // lib/views/document_verification_screen.dart
 import 'package:flutter/material.dart';
+import 'worker_service_packages_screen.dart';
 
 class DocumentVerificationScreen extends StatelessWidget {
   const DocumentVerificationScreen({super.key});
@@ -43,7 +44,7 @@ class DocumentVerificationScreen extends StatelessWidget {
               ),
             ),
           ),
-          _buildBottomNav(),
+          _buildBottomNav(context),
         ],
       ),
     );
@@ -186,7 +187,7 @@ class DocumentVerificationScreen extends StatelessWidget {
   Widget _photoBox() { return Container(width: 80, height: 80, decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(8))); }
   Widget _addPhotoBox() { return Container(width: 80, height: 80, decoration: BoxDecoration(border: Border.all(color: primaryGreen), borderRadius: BorderRadius.circular(8)), child: const Icon(Icons.add, color: primaryGreen)); }
 
-  Widget _buildBottomNav() {
+  Widget _buildBottomNav(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(border: Border(top: BorderSide(color: Color(0xFFF1F4F9)))),
@@ -196,7 +197,12 @@ class DocumentVerificationScreen extends StatelessWidget {
           const Spacer(),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE8F6F1), minimumSize: const Size(180, 50), elevation: 0),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const WorkerServicePackagesScreen()),
+              );
+            },
             child: const Row(children: [Icon(Icons.check_circle_outline, color: primaryGreen), SizedBox(width: 8), Text("SUBMIT", style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold))]),
           ),
         ],

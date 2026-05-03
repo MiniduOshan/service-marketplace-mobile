@@ -22,9 +22,19 @@ class AuthController {
 
 
   // Temporarily sets the role to simulate a successful login
-  void setMockRole(UserRole role) {
+  void setMockRole(UserRole role, {bool isRegistered = false}) {
     _currentUserRole = role;
-    _authStateNotifier.value = AppUser(id: 'mock_id', role: role);
+    _authStateNotifier.value = AppUser(id: 'mock_id', role: role, isRegistrationComplete: isRegistered);
+  }
+
+  void completeRegistration() {
+    if (_authStateNotifier.value != null) {
+      _authStateNotifier.value = AppUser(
+        id: _authStateNotifier.value!.id,
+        role: _authStateNotifier.value!.role,
+        isRegistrationComplete: true,
+      );
+    }
   }
 
 

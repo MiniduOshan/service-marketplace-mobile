@@ -77,16 +77,12 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
                 ),
                 onPressed: () {
-                  // 1. Set role to worker
+                  // 1. Set role to worker (isRegistrationComplete defaults to false)
                   authController.setMockRole(UserRole.worker);
 
-
-                  // 2. Redirect to Worker Dashboard and clear history
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const WorkerDashboard()),
-                    (route) => false,
-                  );
+                  // 2. Clear stack and return to root. 
+                  // AuthWrapper will now automatically show the Registration screen.
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 child: const Text("Verify", style: TextStyle(color: Colors.white, fontSize: 18)),
               ),

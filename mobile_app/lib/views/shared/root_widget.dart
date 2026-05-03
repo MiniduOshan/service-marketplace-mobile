@@ -4,6 +4,7 @@ import '../onboarding/onboarding_screen.dart'; // Path to Onboarding flow
 import '../worker/worker_dashboard.dart'; // Path to Worker Dashboard.png
 import '../../controllers/auth_controller.dart';
 import '../../models/app_user.dart';
+import '../worker/worker_registration_screen.dart';
 
 
 class AuthWrapper extends StatelessWidget {
@@ -23,9 +24,13 @@ class AuthWrapper extends StatelessWidget {
 
         // 2. User IS logged in - Check Role and redirect accordingly
         if (user.role == UserRole.worker) {
-          return const WorkerDashboard(); // Redirects to Worker Dashboard.png
+          if (user.isRegistrationComplete) {
+            return const WorkerDashboard();
+          } else {
+            return WorkerRegistrationScreen();
+          }
         } else {
-          return const HomeScreen(); // Redirects to User Dashboard (Home Screen.png)
+          return const HomeScreen();
         }
       },
     );
