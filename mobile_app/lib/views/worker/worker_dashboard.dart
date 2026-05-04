@@ -373,7 +373,7 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
         onTap: (index) {
           if (index == 1) Navigator.pushNamed(context, '/job-requests');
           if (index == 2) Navigator.pushNamed(context, '/worker-wallet');
-          if (index == 3) Navigator.pushNamed(context, '/profile');
+          if (index == 3) Navigator.pushNamed(context, '/worker-profile');
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: "Dashboard"),
