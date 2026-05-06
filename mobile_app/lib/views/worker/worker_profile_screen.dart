@@ -38,7 +38,7 @@ class WorkerProfileScreen extends StatelessWidget {
             const SizedBox(height: 25),
             _buildPortfolioSection(),
             const SizedBox(height: 25),
-            _buildRatingsSection(),
+            _buildRatingsSection(context),
             const SizedBox(height: 25),
             _buildAccountSettingsSection(),
             const SizedBox(height: 40),
@@ -453,7 +453,7 @@ class WorkerProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRatingsSection() {
+  Widget _buildRatingsSection(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
@@ -471,32 +471,37 @@ class WorkerProfileScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Your Ratings",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: accentBlue,
+          InkWell(
+            onTap: () => Navigator.pushNamed(context, '/worker-reviews'),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Your Ratings",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: accentBlue,
+                  ),
                 ),
-              ),
-              Row(
-                children: const [
-                  Icon(Icons.star, color: Colors.orange, size: 20),
-                  SizedBox(width: 4),
-                  Text(
-                    "4.9",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  Text(
-                    " (112)",
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
-                  ),
-                ],
-              ),
-            ],
+                Row(
+                  children: const [
+                    Icon(Icons.star, color: Colors.orange, size: 20),
+                    SizedBox(width: 4),
+                    Text(
+                      "4.9",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      " (112)",
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(Icons.chevron_right, color: Colors.grey, size: 18),
+                  ],
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 20),
           Row(

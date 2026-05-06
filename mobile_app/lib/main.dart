@@ -23,6 +23,8 @@ import 'views/customer/search_results_screen.dart';
 import 'views/customer/worker_profile_public_screen.dart';
 import 'views/worker/worker_dashboard.dart';
 import 'views/worker/worker_profile_screen.dart';
+import 'views/worker/worker_reviews_screen.dart';
+import 'views/shared/notifications_screen.dart';
 
 
 void main() {
@@ -79,6 +81,8 @@ class SkilledLKApp extends StatelessWidget {
         '/worker-profile-public': (context) => const WorkerProfilePublicScreen(),
         '/worker-dashboard': (context) => const WorkerDashboard(),
         '/worker-profile': (context) => const WorkerProfileScreen(),
+        '/worker-reviews': (context) => const WorkerReviewsScreen(),
+        '/notifications': (context) => const NotificationsScreen(),
       },
     );
 

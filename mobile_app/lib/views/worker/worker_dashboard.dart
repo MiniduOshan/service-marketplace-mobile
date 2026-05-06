@@ -106,7 +106,7 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
           children: [
             IconButton(
               icon: const Icon(Icons.notifications_none_outlined, color: Colors.grey, size: 28),
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, '/notifications'),
             ),
             Positioned(
               right: 12,
@@ -236,7 +236,10 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
           onTap: () => Navigator.pushNamed(context, '/job-requests'),
           child: _buildStatCard("127", "TOTAL JOBS"),
         ),
-        _buildStatCard("4.9", "RATING"),
+        GestureDetector(
+          onTap: () => Navigator.pushNamed(context, '/worker-reviews'),
+          child: _buildStatCard("4.9", "RATING"),
+        ),
         _buildStatCard("LKR 2,500", "SUBSCRIPTION"),
         _buildStatCard("87", "PRIORITY SCORE"),
     ]);
