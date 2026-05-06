@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'document_verification_screen.dart';
 
 class WorkerRegistrationScreen extends StatefulWidget {
-  const WorkerRegistrationScreen({super.key});
+  final bool isEditing;
+  const WorkerRegistrationScreen({super.key, this.isEditing = false});
 
   @override
   State<WorkerRegistrationScreen> createState() => _WorkerRegistrationScreenState();
@@ -356,13 +357,20 @@ class _WorkerRegistrationScreenState extends State<WorkerRegistrationScreen> {
           const Spacer(),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: primaryGreen, minimumSize: const Size(180, 50), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const DocumentVerificationScreen())),
-            child: const Row(
+            onPressed: () {
+              if (widget.isEditing) {
+                // Save logic here
+                Navigator.pop(context);
+              } else {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const DocumentVerificationScreen()));
+              }
+            },
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Next: Documents", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                SizedBox(width: 8),
-                Icon(Icons.chevron_right, color: Colors.white, size: 20),
+                Text(widget.isEditing ? "Save Changes" : "Next: Documents", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                const SizedBox(width: 8),
+                Icon(widget.isEditing ? Icons.check : Icons.chevron_right, color: Colors.white, size: 20),
               ],
             ),
           ),

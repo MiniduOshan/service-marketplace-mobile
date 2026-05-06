@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../../controllers/auth_controller.dart';
 
 class WorkerServicePackagesScreen extends StatefulWidget {
-  const WorkerServicePackagesScreen({super.key});
+  final bool isEditing;
+  const WorkerServicePackagesScreen({super.key, this.isEditing = false});
 
   @override
   State<WorkerServicePackagesScreen> createState() => _WorkerServicePackagesScreenState();
@@ -290,13 +291,24 @@ class _WorkerServicePackagesScreenState extends State<WorkerServicePackagesScree
               minimumSize: const Size(180, 50), 
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
             onPressed: () {
-              // Final Submit Logic - Mark registration as complete
-              authController.completeRegistration();
-              
-              // Return to root, AuthWrapper will now show the Dashboard
-              Navigator.of(context).popUntil((route) => route.isFirst);
+              if (widget.isEditing) {
+                // Update logic here
+                Navigator.pop(context);
+              } else {
+                // Final Submit Logic - Mark registration as complete
+                authController.completeRegistration();
+                
+                // Return to root, AuthWrapper will now show the Dashboard
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
             },
-            child: const Row(children: [Text("Submit", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)), SizedBox(width: 8), Icon(Icons.chevron_right, color: Colors.white)]),
+            child: Row(
+              children: [
+                Text(widget.isEditing ? "Update Packages" : "Submit", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                const SizedBox(width: 8),
+                Icon(widget.isEditing ? Icons.check : Icons.chevron_right, color: Colors.white)
+              ],
+            ),
           ),
         ],
       ),

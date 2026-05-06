@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'worker_registration_screen.dart';
+import 'worker_service_packages_screen.dart';
+import 'worker_reviews_screen.dart';
 
 class WorkerProfileScreen extends StatelessWidget {
   const WorkerProfileScreen({super.key});
@@ -30,11 +33,11 @@ class WorkerProfileScreen extends StatelessWidget {
           children: [
             _buildProfileHeader(),
             const SizedBox(height: 25),
-            _buildPersonalDetailsSection(),
+            _buildPersonalDetailsSection(context),
             const SizedBox(height: 20),
             _buildStatsSection(),
             const SizedBox(height: 25),
-            _buildServicesSection(),
+            _buildServicesSection(context),
             const SizedBox(height: 25),
             _buildPortfolioSection(),
             const SizedBox(height: 25),
@@ -117,7 +120,7 @@ class WorkerProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPersonalDetailsSection() {
+  Widget _buildPersonalDetailsSection(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
@@ -137,8 +140,8 @@ class WorkerProfileScreen extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 "Personal Details",
                 style: TextStyle(
                   fontSize: 18,
@@ -146,12 +149,15 @@ class WorkerProfileScreen extends StatelessWidget {
                   color: accentBlue,
                 ),
               ),
-              Text(
-                "Manage",
-                style: TextStyle(
-                  color: primaryGreen,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+              InkWell(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const WorkerRegistrationScreen(isEditing: true))),
+                child: const Text(
+                  "Manage",
+                  style: TextStyle(
+                    color: primaryGreen,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],
@@ -281,7 +287,7 @@ class WorkerProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildServicesSection() {
+  Widget _buildServicesSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -289,8 +295,8 @@ class WorkerProfileScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 "Your Services",
                 style: TextStyle(
                   fontSize: 18,
@@ -298,12 +304,15 @@ class WorkerProfileScreen extends StatelessWidget {
                   color: accentBlue,
                 ),
               ),
-              Text(
-                "Manage",
-                style: TextStyle(
-                  color: primaryGreen,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+              InkWell(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const WorkerServicePackagesScreen(isEditing: true))),
+                child: const Text(
+                  "Manage",
+                  style: TextStyle(
+                    color: primaryGreen,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],
