@@ -15,14 +15,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final String currentLocation = "Maharagama, Colombo";
 
   final List<Category> categories = [
-    Category(name: "Painting", iconData: Icons.brush_outlined),
-    Category(name: "Electrical", iconData: Icons.power_outlined),
-    Category(name: "Plumbing", iconData: Icons.water_drop_outlined),
-    Category(name: "Carpentry", iconData: Icons.handyman_outlined),
-    Category(name: "AC Repair", iconData: Icons.ac_unit_outlined),
-    Category(name: "Cleaning", iconData: Icons.cleaning_services_outlined),
-    Category(name: "Masonry", iconData: Icons.foundation_outlined),
-    Category(name: "More", iconData: Icons.add_outlined),
+    Category(name: "Painting", iconData: Icons.format_paint_outlined, color: const Color(0xFF006D44)),
+    Category(name: "Electrical", iconData: Icons.electrical_services_outlined, color: const Color(0xFFE67E22)),
+    Category(name: "Plumbing", iconData: Icons.plumbing_outlined, color: const Color(0xFF2980B9)),
+    Category(name: "Carpentry", iconData: Icons.architecture_outlined, color: const Color(0xFFE91E63)),
+    Category(name: "AC Repair", iconData: Icons.ac_unit_outlined, color: const Color(0xFF9B59B6)),
+    Category(name: "Cleaning", iconData: Icons.cleaning_services_outlined, color: const Color(0xFF1ABC9C)),
+    Category(name: "Masonry", iconData: Icons.foundation_outlined, color: const Color(0xFF34495E)),
+    Category(name: "More", iconData: Icons.add, color: primaryGreen),
   ];
 
   final List<Worker> topRatedWorkers = [
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_none_outlined, color: Colors.grey, size: 28),
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, '/notifications'),
         ),
         const SizedBox(width: 8),
       ],
@@ -125,7 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
             const Spacer(),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Location selection coming soon!")));
+              },
               child: const Text("Change", style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)),
             ),
           ],
@@ -174,17 +176,35 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           itemCount: categories.length,
           itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(color: placeholderBg, borderRadius: BorderRadius.circular(20)),
-                    child: Center(child: Icon(categories[index].iconData, color: const Color(0xFF1B434D), size: 30)),
+            return InkWell(
+              onTap: () => Navigator.pushNamed(
+                context, 
+                '/search-results', 
+                arguments: {'category': categories[index].name}
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: categories[index].name == "More" 
+                            ? categories[index].color 
+                            : categories[index].color.withValues(alpha: 0.1), 
+                        borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: Center(
+                        child: Icon(
+                          categories[index].iconData, 
+                          color: categories[index].name == "More" ? Colors.white : categories[index].color, 
+                          size: 30
+                        )
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(categories[index].name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-              ],
+                  const SizedBox(height: 8),
+                  Text(categories[index].name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+                ],
+              ),
             );
           },
         ),
@@ -330,7 +350,14 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          TextButton(onPressed: () {}, child: const Text("See all", style: TextStyle(color: primaryGreen))),
+          TextButton(
+            onPressed: () => Navigator.pushNamed(
+              context, 
+              '/search-results',
+              arguments: {'category': title.contains("Rated") ? "Top Rated" : "All"}
+            ), 
+            child: const Text("See all", style: TextStyle(color: primaryGreen))
+          ),
         ],
       ),
     );

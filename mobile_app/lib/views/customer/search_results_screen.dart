@@ -10,27 +10,89 @@ class SearchResultsScreen extends StatefulWidget {
 }
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
-  static const Color primaryGreen = Color(0xFF006D44);
+  late String activeCategory;
+  String activeFilter = "All";
+  late List<Worker> filteredResults;
   bool isListView = true;
+  late TextEditingController _searchController;
 
-  final List<Worker> searchResults = [
+  final List<Worker> allWorkers = [
     Worker(
-      id: "1", name: "Kamal Ariyaratne", specialty: "Painter", location: "Colombo 5",
+      id: "1", name: "Kamal Ariyaratne", specialty: "Painting", location: "Colombo 5",
       rating: 4.9, reviewCount: 127, experience: 8, distance: 2.1,
       startingPrice: "5,000", priceUnit: "room", initial: "KA",
       isFeatured: true, isPro: true,
     ),
     Worker(
-      id: "2", name: "Nuwan Mahesh", specialty: "Master Painter", location: "Colombo 3",
+      id: "2", name: "Nuwan Mahesh", specialty: "Painting", location: "Colombo 3",
       rating: 4.8, reviewCount: 94, experience: 12, distance: 3.5,
       startingPrice: "4,500", priceUnit: "room", initial: "NM",
     ),
     Worker(
-      id: "3", name: "Saman De Silva", specialty: "Wall Artist", location: "Dehiwala",
+      id: "3", name: "Saman De Silva", specialty: "Electrical", location: "Dehiwala",
       rating: 4.7, reviewCount: 42, experience: 5, distance: 5.2,
       startingPrice: "6,200", priceUnit: "room", initial: "SD",
     ),
+    Worker(
+      id: "4", name: "Janaka Perera", specialty: "Plumbing", location: "Nugegoda",
+      rating: 4.6, reviewCount: 55, experience: 7, distance: 4.8,
+      startingPrice: "3,800", priceUnit: "task", initial: "JP",
+    ),
+    Worker(
+      id: "5", name: "Roshan Silva", specialty: "Carpentry", location: "Kottawa",
+      rating: 4.9, reviewCount: 110, experience: 10, distance: 6.1,
+      startingPrice: "7,500", priceUnit: "day", initial: "RS", isPro: true,
+    ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    activeCategory = args?['category'] ?? "All";
+    _searchController.text = activeCategory == "All" ? "" : activeCategory;
+    _applyFilter();
+  }
+
+  void _applyFilter() {
+    List<Worker> results = List.from(allWorkers);
+
+    // 1. Category Filter
+    if (activeCategory != "All" && activeCategory != "More") {
+      results = results.where((w) => 
+        w.specialty.toLowerCase().contains(activeCategory.toLowerCase())
+      ).toList();
+    }
+
+    // 2. Secondary Filter (Near Me, Top Rated, Verified)
+    if (activeFilter == "Near Me") {
+      results = results.where((w) => w.distance <= 3.0).toList(); // Simple near me logic
+      results.sort((a, b) => a.distance.compareTo(b.distance));
+    } else if (activeFilter == "Top Rated") {
+      results = results.where((w) => w.rating >= 4.8).toList();
+      results.sort((a, b) => b.rating.compareTo(a.rating));
+    } else if (activeFilter == "Verified") {
+      results = results.where((w) => w.isVerified).toList();
+    }
+
+    setState(() {
+      filteredResults = results;
+    });
+  }
+
+  static const Color primaryGreen = Color(0xFF006D44);
 
   @override
   Widget build(BuildContext context) {
@@ -42,17 +104,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           _buildFilters(),
           _buildListMapToggle(),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                Text("Showing ${searchResults.length} of 24 workers", 
-                  style: const TextStyle(color: Colors.grey, fontSize: 14)),
-                const SizedBox(height: 16),
-                ...searchResults.map((worker) => _buildWorkerCard(worker)),
-                _buildLoadMore(),
-                _buildFooter(),
-              ],
-            ),
+            child: isListView 
+              ? _buildWorkerList()
+              : _buildMapView(),
           ),
         ],
       ),
@@ -74,19 +128,40 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           color: const Color(0xFFF1F4F9),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const TextField(
+        child: TextField(
+          controller: _searchController,
+          onChanged: (val) {
+            setState(() {
+              activeCategory = val.isEmpty ? "All" : val;
+              _applyFilter();
+            });
+          },
           decoration: InputDecoration(
-            hintText: "Painters",
-            prefixIcon: Icon(Icons.search, color: Colors.grey),
+            hintText: "Search workers...",
+            prefixIcon: const Icon(Icons.search, color: Colors.grey),
+            suffixIcon: activeCategory != "All" && activeCategory.isNotEmpty 
+              ? IconButton(
+                  icon: const Icon(Icons.clear, size: 18),
+                  onPressed: () {
+                    setState(() {
+                      activeCategory = "All";
+                      _searchController.clear();
+                      _applyFilter();
+                    });
+                  },
+                )
+              : null,
             border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(vertical: 10),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10),
           ),
         ),
       ),
       actions: [
         IconButton(
           icon: const Icon(Icons.tune, color: primaryGreen),
-          onPressed: () {},
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Advanced filters coming soon!")));
+          },
         ),
       ],
     );
@@ -101,20 +176,76 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: filters.length,
         itemBuilder: (context, index) {
-          bool isFirst = index == 0;
+          bool isSelected = activeFilter == filters[index];
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: FilterChip(
               label: Text(filters[index]),
-              selected: isFirst,
-              onSelected: (val) {},
+              selected: isSelected,
+              onSelected: (val) {
+                setState(() {
+                  activeFilter = filters[index];
+                  _applyFilter();
+                });
+              },
               backgroundColor: Colors.white,
               selectedColor: primaryGreen,
-              labelStyle: TextStyle(color: isFirst ? Colors.white : Colors.black),
+              labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
               shape: StadiumBorder(side: BorderSide(color: Colors.grey.shade300)),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildWorkerList() {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Text("Showing ${filteredResults.length} workers for \"$activeCategory\"${activeFilter != "All" ? " ($activeFilter)" : ""}", 
+          style: const TextStyle(color: Colors.grey, fontSize: 14)),
+        const SizedBox(height: 16),
+        if (filteredResults.isEmpty)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 50),
+              child: Text("No workers found in this category yet."),
+            ),
+          )
+        else
+          ...filteredResults.map((worker) => _buildWorkerCard(worker)),
+        _buildLoadMore(),
+        _buildFooter(),
+      ],
+    );
+  }
+
+  Widget _buildMapView() {
+    return Container(
+      width: double.infinity,
+      color: Colors.grey.shade100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.map_outlined, size: 80, color: primaryGreen.withValues(alpha: 0.3)),
+          const SizedBox(height: 16),
+          const Text("Map View", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Text("Displaying ${filteredResults.length} workers on the map based on your location.", 
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.grey)),
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(backgroundColor: primaryGreen),
+            onPressed: () => setState(() => isListView = true), 
+            icon: const Icon(Icons.list, color: Colors.white),
+            label: const Text("Switch to List", style: TextStyle(color: Colors.white)),
+          )
+        ],
       ),
     );
   }
@@ -132,8 +263,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
             ),
             child: Row(
               children: [
-                _toggleButton("List", true),
-                _toggleButton("Map", false),
+                _toggleButton("List", isListView),
+                _toggleButton("Map", !isListView),
               ],
             ),
           ),
@@ -143,7 +274,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
             items: ["Nearest", "Price", "Rating"].map((String value) {
               return DropdownMenuItem<String>(value: value, child: Text("Sort by: $value"));
             }).toList(),
-            onChanged: (_) {},
+            onChanged: (val) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Sorted by $val")));
+            },
           ),
         ],
       ),
@@ -151,13 +284,20 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
   }
 
   Widget _toggleButton(String text, bool active) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      decoration: BoxDecoration(
-        color: active ? primaryGreen : Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isListView = (text == "List");
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          color: active ? primaryGreen : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(text, style: TextStyle(color: active ? Colors.white : Colors.black)),
       ),
-      child: Text(text, style: TextStyle(color: active ? Colors.white : Colors.black)),
     );
   }
 
@@ -269,7 +409,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(minimumSize: const Size(double.infinity, 45)),
-        onPressed: () {}, 
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Loading more workers...")));
+        }, 
         child: const Text("Load more")
       ),
     );
@@ -281,7 +423,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
         const Text("No more workers nearby — expand search area?", 
           textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Distance radius settings coming soon!")));
+          },
           child: const Text("Change distance radius", 
             style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)),
         )

@@ -29,7 +29,7 @@ class WorkerWalletScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              _buildMainBalanceCard(),
+              _buildMainBalanceCard(context),
               const SizedBox(height: 20),
               _buildQuickStatsRow(),
               const SizedBox(height: 24),
@@ -37,9 +37,9 @@ class WorkerWalletScreen extends StatelessWidget {
               const SizedBox(height: 20),
               _buildProPlanBanner(context),
               const SizedBox(height: 24),
-              _buildRecentTransactions(),
+              _buildRecentTransactions(context),
               const SizedBox(height: 24),
-              _buildWithdrawalSection(),
+              _buildWithdrawalSection(context),
               const SizedBox(height: 30),
             ],
           ),
@@ -48,7 +48,7 @@ class WorkerWalletScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMainBalanceCard() {
+  Widget _buildMainBalanceCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -67,7 +67,9 @@ class WorkerWalletScreen extends StatelessWidget {
             style: TextStyle(color: Colors.white70, fontSize: 14)),
           const SizedBox(height: 24),
           OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Withdrawal process initiated!")));
+            },
             style: OutlinedButton.styleFrom(
               side: const BorderSide(color: Colors.white38),
               minimumSize: const Size(double.infinity, 50),
@@ -165,9 +167,7 @@ class WorkerWalletScreen extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {
-              // Navigate to Subscription Screen
-            },
+            onPressed: () => Navigator.pushNamed(context, '/worker-subscription'),
             child: const Text("MANAGE", style: TextStyle(color: Color(0xFF1B434D), fontWeight: FontWeight.bold)),
           ),
         ],
@@ -175,14 +175,16 @@ class WorkerWalletScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentTransactions() {
+  Widget _buildRecentTransactions(BuildContext context) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text("Recent transactions", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            TextButton(onPressed: () {}, child: const Text("See all", style: TextStyle(color: primaryGreen))),
+            TextButton(onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Full transaction history coming soon!")));
+            }, child: const Text("See all", style: TextStyle(color: primaryGreen))),
           ],
         ),
         _transactionTile("Deep Cleaning - Apartment", "+ LKR 4,500", "Apr 12, 2025", "PAID", Colors.green),
@@ -221,7 +223,7 @@ class WorkerWalletScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildWithdrawalSection() {
+  Widget _buildWithdrawalSection(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
@@ -231,7 +233,9 @@ class WorkerWalletScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text("Bank account", style: TextStyle(fontWeight: FontWeight.bold)),
-              TextButton(onPressed: () {}, child: const Text("Change", style: TextStyle(color: primaryGreen))),
+              TextButton(onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Bank settings coming soon!")));
+              }, child: const Text("Change", style: TextStyle(color: primaryGreen))),
             ],
           ),
           const Text("****1234 (Sampath Bank)", style: TextStyle(color: Colors.grey)),
@@ -251,7 +255,9 @@ class WorkerWalletScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Withdrawal request submitted!"), backgroundColor: primaryGreen));
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryGreen,
               minimumSize: const Size(double.infinity, 55),

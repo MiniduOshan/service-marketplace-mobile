@@ -39,11 +39,11 @@ class WorkerProfileScreen extends StatelessWidget {
             const SizedBox(height: 25),
             _buildServicesSection(context),
             const SizedBox(height: 25),
-            _buildPortfolioSection(),
+            _buildPortfolioSection(context),
             const SizedBox(height: 25),
             _buildRatingsSection(context),
             const SizedBox(height: 25),
-            _buildAccountSettingsSection(),
+            _buildAccountSettingsSection(context),
             const SizedBox(height: 40),
           ],
         ),
@@ -319,13 +319,13 @@ class WorkerProfileScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 15),
-        _buildServiceTile("Interior Painting", "Rs. 2500 / hr", Icons.format_paint, true),
-        _buildServiceTile("Leak Repair", "Rs. 1800 / task", Icons.plumbing, true),
+        _buildServiceTile(context, "Interior Painting", "Rs. 2500 / hr", Icons.format_paint, true),
+        _buildServiceTile(context, "Leak Repair", "Rs. 1800 / task", Icons.plumbing, true),
       ],
     );
   }
 
-  Widget _buildServiceTile(String name, String price, IconData icon, bool isActive) {
+  Widget _buildServiceTile(BuildContext context, String name, String price, IconData icon, bool isActive) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       padding: const EdgeInsets.all(15),
@@ -367,7 +367,9 @@ class WorkerProfileScreen extends StatelessWidget {
           ),
           Switch(
             value: isActive,
-            onChanged: (v) {},
+            onChanged: (v) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name ${v ? 'enabled' : 'disabled'}")));
+            },
             activeColor: Colors.white,
             activeTrackColor: primaryGreen,
           ),
@@ -376,7 +378,7 @@ class WorkerProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPortfolioSection() {
+  Widget _buildPortfolioSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -413,7 +415,7 @@ class WorkerProfileScreen extends StatelessWidget {
               _buildPortfolioImage('https://images.unsplash.com/photo-1589939705384-5185138a04b9?q=80&w=200&auto=format&fit=crop'),
               _buildPortfolioImage('https://images.unsplash.com/photo-1562259949-e8e7689d7828?q=80&w=200&auto=format&fit=crop'),
               _buildPortfolioImage('https://images.unsplash.com/photo-1604147706480-5163723f2cfc?q=80&w=200&auto=format&fit=crop'),
-              _buildAddWorkButton(),
+              _buildAddWorkButton(context),
             ],
           ),
         ),
@@ -435,29 +437,34 @@ class WorkerProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAddWorkButton() {
-    return Container(
-      width: 150,
-      margin: const EdgeInsets.only(right: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: primaryGreen.withOpacity(0.3), style: BorderStyle.solid),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(Icons.add_photo_alternate_outlined, color: primaryGreen, size: 30),
-          SizedBox(height: 8),
-          Text(
-            "Add New Work",
-            style: TextStyle(
-              color: primaryGreen,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
+  Widget _buildAddWorkButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Add to portfolio coming soon!")));
+      },
+      child: Container(
+        width: 150,
+        margin: const EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: primaryGreen.withOpacity(0.3), style: BorderStyle.solid),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.add_photo_alternate_outlined, color: primaryGreen, size: 30),
+            SizedBox(height: 8),
+            Text(
+              "Add New Work",
+              style: TextStyle(
+                color: primaryGreen,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -544,7 +551,9 @@ class WorkerProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Reply feature coming soon!")));
+            },
             icon: const Icon(Icons.reply, size: 16),
             label: const Text("Reply to feedback"),
             style: TextButton.styleFrom(
@@ -559,7 +568,7 @@ class WorkerProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAccountSettingsSection() {
+  Widget _buildAccountSettingsSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -576,15 +585,19 @@ class WorkerProfileScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 15),
-        _buildSettingsTile(Icons.notifications_none, "Notification Preferences"),
-        _buildSettingsTile(Icons.payment, "Payment Details"),
-        _buildSettingsTile(Icons.language, "Language", trailingText: "English"),
-        _buildSettingsTile(Icons.help_outline, "Help Center"),
+        _buildSettingsTile(context, Icons.notifications_none, "Notification Preferences", 
+          onTap: () => Navigator.pushNamed(context, '/worker-notification-settings')),
+        _buildSettingsTile(context, Icons.payment, "Payment Details",
+          onTap: () => Navigator.pushNamed(context, '/worker-payment-settings')),
+        _buildSettingsTile(context, Icons.language, "Language", trailingText: "English",
+          onTap: () => Navigator.pushNamed(context, '/language-settings')),
+        _buildSettingsTile(context, Icons.help_outline, "Help Center",
+          onTap: () => Navigator.pushNamed(context, '/help-center')),
       ],
     );
   }
 
-  Widget _buildSettingsTile(IconData icon, String title, {String? trailingText}) {
+  Widget _buildSettingsTile(BuildContext context, IconData icon, String title, {String? trailingText, VoidCallback? onTap}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
       decoration: BoxDecoration(
@@ -592,6 +605,9 @@ class WorkerProfileScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: ListTile(
+        onTap: onTap ?? () {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$title settings coming soon!")));
+        },
         leading: Icon(icon, color: accentBlue.withOpacity(0.7)),
         title: Text(
           title,

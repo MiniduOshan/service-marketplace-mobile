@@ -36,8 +36,8 @@ class JobRequestsScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildPendingList(),
-            _buildActiveList(),
+            _buildPendingList(context),
+            _buildActiveList(context),
             const Center(child: Text("Completed Jobs")),
             const Center(child: Text("Cancelled Jobs")),
           ],
@@ -54,28 +54,28 @@ class JobRequestsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPendingList() {
+  Widget _buildPendingList(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        _buildNewRequestCard(),
+        _buildNewRequestCard(context),
         const SizedBox(height: 16),
-        _buildStandardRequestCard(),
+        _buildStandardRequestCard(context),
       ],
     );
   }
 
-  Widget _buildActiveList() {
+  Widget _buildActiveList(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        _buildInProgressCard(),
+        _buildInProgressCard(context),
       ],
     );
   }
 
   // 1. Detailed New Request Card
-  Widget _buildNewRequestCard() {
+  Widget _buildNewRequestCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -111,20 +111,26 @@ class JobRequestsScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              Expanded(child: _outlinedBtn("Decline", Colors.red)),
+              Expanded(child: _outlinedBtn(context, "Decline", Colors.red, () {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Request declined."), backgroundColor: Colors.red));
+              })),
               const SizedBox(width: 8),
-              Expanded(child: _outlinedBtn("Chat first", Colors.black)),
+              Expanded(child: _outlinedBtn(context, "Chat first", Colors.black, () {
+                Navigator.pushNamed(context, '/chat');
+              })),
             ],
           ),
           const SizedBox(height: 8),
-          _fullWidthBtn("Accept Job", primaryGreen),
+          _fullWidthBtn(context, "Accept Job", primaryGreen, () {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Job accepted!"), backgroundColor: primaryGreen));
+          }),
         ],
       ),
     );
   }
 
   // 2. Standard Pending Card
-  Widget _buildStandardRequestCard() {
+  Widget _buildStandardRequestCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: Colors.grey.shade200)),
@@ -145,14 +151,16 @@ class JobRequestsScreen extends StatelessWidget {
           const SizedBox(height: 16),
           _timerBanner("1 hour left to accept", Icons.warning_amber_rounded),
           const SizedBox(height: 16),
-          _fullWidthBtn("Accept Job", primaryGreen),
+          _fullWidthBtn(context, "Accept Job", primaryGreen, () {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Job accepted!"), backgroundColor: primaryGreen));
+          }),
         ],
       ),
     );
   }
 
   // 3. In Progress Card
-  Widget _buildInProgressCard() {
+  Widget _buildInProgressCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -173,14 +181,18 @@ class JobRequestsScreen extends StatelessWidget {
               const Text("Kamani Silva", style: TextStyle(fontWeight: FontWeight.bold)),
               const Spacer(),
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Initiating call...")));
+                },
                 icon: const Icon(Icons.phone, size: 16, color: Color(0xFF1E40AF)),
                 label: const Text("Call customer", style: TextStyle(color: Color(0xFF1E40AF), fontWeight: FontWeight.bold)),
               )
             ],
           ),
           const SizedBox(height: 16),
-          _fullWidthBtnWithIcon("Mark as Complete", primaryGreen, Icons.check_circle_outline),
+          _fullWidthBtnWithIcon(context, "Mark as Complete", primaryGreen, Icons.check_circle_outline, () {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Job marked as complete!"), backgroundColor: primaryGreen));
+          }),
         ],
       ),
     );
@@ -253,32 +265,32 @@ class JobRequestsScreen extends StatelessWidget {
     );
   }
 
-  Widget _outlinedBtn(String text, Color color) {
+  Widget _outlinedBtn(BuildContext context, String text, Color color, VoidCallback onPressed) {
     return OutlinedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: OutlinedButton.styleFrom(side: BorderSide(color: color.withValues(alpha: 0.2)), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), minimumSize: const Size(0, 48)),
       child: Text(text, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
     );
   }
 
-  Widget _fullWidthBtn(String text, Color color) {
+  Widget _fullWidthBtn(BuildContext context, String text, Color color, VoidCallback onPressed) {
     return SizedBox(
       width: double.infinity,
       height: 48,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(backgroundColor: color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), elevation: 0),
         child: Text(text, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
   }
 
-  Widget _fullWidthBtnWithIcon(String text, Color color, IconData icon) {
+  Widget _fullWidthBtnWithIcon(BuildContext context, String text, Color color, IconData icon, VoidCallback onPressed) {
     return SizedBox(
       width: double.infinity,
       height: 48,
       child: ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: onPressed,
         icon: Icon(icon, color: Colors.white),
         label: Text(text, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         style: ElevatedButton.styleFrom(backgroundColor: color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), elevation: 0),

@@ -230,7 +230,7 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
   Widget _buildQuickStats() {
     return GridView.count(crossAxisCount: 2, shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(), // Important for SingleChildScrollView
-      crossAxisSpacing: 16, mainAxisSpacing: 16, childAspectRatio: 2.2, // Matches Figma layout
+      crossAxisSpacing: 16, mainAxisSpacing: 16, childAspectRatio: 2.1, // Adjusted to prevent overflow
       children: [
         GestureDetector(
           onTap: () => Navigator.pushNamed(context, '/job-requests'),
@@ -240,7 +240,10 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
           onTap: () => Navigator.pushNamed(context, '/worker-reviews'),
           child: _buildStatCard("4.9", "RATING"),
         ),
-        _buildStatCard("LKR 2,500", "SUBSCRIPTION"),
+        GestureDetector(
+          onTap: () => Navigator.pushNamed(context, '/worker-subscription'),
+          child: _buildStatCard("LKR 2,500", "SUBSCRIPTION"),
+        ),
         _buildStatCard("87", "PRIORITY SCORE"),
     ]);
   }
@@ -300,9 +303,23 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
           const SizedBox(height: 16),
           // Accept/Decline Buttons from Figma
           Row(children: [
-              Expanded(child: SizedBox(height: 44, child: ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF006D44), elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), child: const Text("Accept", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))))),
+              Expanded(child: SizedBox(height: 44, child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Job request accepted! Check 'Upcoming Jobs'."), backgroundColor: darkDashboardGreen)
+                  );
+                }, 
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF006D44), elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), 
+                child: const Text("Accept", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))))),
               const SizedBox(width: 12),
-              Expanded(child: SizedBox(height: 44, child: OutlinedButton(onPressed: () {}, style: OutlinedButton.styleFrom(side: const BorderSide(color: Color(0xFFF6A3A3)), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), child: const Text("Decline", style: TextStyle(color: Color(0xFFD32F2F), fontWeight: FontWeight.bold))))),
+              Expanded(child: SizedBox(height: 44, child: OutlinedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Job request declined."), backgroundColor: Colors.red)
+                  );
+                }, 
+                style: OutlinedButton.styleFrom(side: const BorderSide(color: Color(0xFFF6A3A3)), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), 
+                child: const Text("Decline", style: TextStyle(color: Color(0xFFD32F2F), fontWeight: FontWeight.bold))))),
           ]),
         ],
       ),
@@ -324,7 +341,13 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
 
           Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: SizedBox(width: double.infinity, height: 44,
-              child: ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF006D44), elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+              child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Job marked as complete!"), backgroundColor: darkDashboardGreen)
+                  );
+                }, 
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF006D44), elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                 child: const Text("Mark complete", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))),
           ),
       ]),

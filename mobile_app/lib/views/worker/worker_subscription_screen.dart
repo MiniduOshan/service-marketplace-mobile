@@ -21,7 +21,7 @@ class WorkerSubscriptionScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildActivePlanHeader(),
+            _buildActivePlanHeader(context),
             const SizedBox(height: 30),
             const Text("What Pro gives you", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
@@ -33,11 +33,15 @@ class WorkerSubscriptionScreen extends StatelessWidget {
             const SizedBox(height: 30),
             _buildPriorityScoreCard(),
             const SizedBox(height: 24),
-            _buildPayPerLeadToggle(),
+            _buildPayPerLeadToggle(context),
             const SizedBox(height: 30),
-            Center(child: TextButton(onPressed: () {}, child: const Text("Manage payment method", style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)))),
+            Center(child: TextButton(onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Payment settings coming soon!")));
+            }, child: const Text("Manage payment method", style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)))),
             const Center(child: Text("•", style: TextStyle(color: Colors.grey))),
-            Center(child: TextButton(onPressed: () {}, child: const Text("Contact support", style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)))),
+            Center(child: TextButton(onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Support chat coming soon!")));
+            }, child: const Text("Contact support", style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)))),
             const SizedBox(height: 40),
           ],
         ),
@@ -45,7 +49,7 @@ class WorkerSubscriptionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActivePlanHeader() {
+  Widget _buildActivePlanHeader(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -81,7 +85,9 @@ class WorkerSubscriptionScreen extends StatelessWidget {
           const SizedBox(height: 20),
           Align(
             alignment: Alignment.centerRight,
-            child: TextButton(onPressed: () {}, child: const Text("Cancel plan", style: TextStyle(color: Colors.white70))),
+            child: TextButton(onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Cancellation request submitted."), backgroundColor: Colors.red));
+            }, child: const Text("Cancel plan", style: TextStyle(color: Colors.white70))),
           ),
         ],
       ),
@@ -194,7 +200,7 @@ class WorkerSubscriptionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPayPerLeadToggle() {
+  Widget _buildPayPerLeadToggle(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade200), borderRadius: BorderRadius.circular(12)),
@@ -205,7 +211,9 @@ class WorkerSubscriptionScreen extends StatelessWidget {
               const Icon(Icons.payments_outlined, color: Colors.grey),
               const SizedBox(width: 12),
               const Expanded(child: Text("Pay-per-lead option", style: TextStyle(fontWeight: FontWeight.bold))),
-              Switch(value: false, onChanged: (v) {}),
+              Switch(value: false, onChanged: (v) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Switching mode coming soon!")));
+              }),
             ],
           ),
           const Padding(

@@ -24,11 +24,11 @@ class UserProfileScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            _buildProfileHeader(),
+            _buildProfileHeader(context),
             const SizedBox(height: 30),
             _buildSettingsList(context),
             const SizedBox(height: 20),
-            _buildSupportSection(),
+            _buildSupportSection(context),
             const SizedBox(height: 30),
             _buildLogoutButton(context),
             const SizedBox(height: 20),
@@ -41,7 +41,7 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(BuildContext context) {
     return Column(
       children: [
         Stack(
@@ -51,16 +51,21 @@ class UserProfileScreen extends StatelessWidget {
               backgroundColor: primaryGreen,
               child: CircleAvatar(
                 radius: 52,
-                backgroundImage: NetworkImage('https://placeholder.com/150'), // Replace with actual data
+                backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=nimal'), // Reliable placeholder
               ),
             ),
             Positioned(
               bottom: 0,
               right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(color: primaryGreen, shape: BoxShape.circle),
-                child: const Icon(Icons.edit_outlined, color: Colors.white, size: 20),
+              child: GestureDetector(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Profile editing coming soon!")));
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(color: primaryGreen, shape: BoxShape.circle),
+                  child: const Icon(Icons.edit_outlined, color: Colors.white, size: 20),
+                ),
               ),
             ),
           ],
@@ -79,17 +84,17 @@ class UserProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
       child: Column(
         children: [
-          _settingTile(Icons.calendar_today_outlined, "My Bookings", Colors.green.shade50, Colors.green),
-          _settingTile(Icons.account_balance_wallet_outlined, "Payment Methods", Colors.teal.shade50, Colors.teal, subtitle: "Visa •••• 1234"),
-          _settingTile(Icons.bookmark_border, "Saved Addresses", Colors.blue.shade50, Colors.blue),
-          _settingTile(Icons.notifications_none, "Notifications", Colors.orange.shade50, Colors.orange, isSwitch: true),
-          _settingTile(Icons.language, "Language", Colors.purple.shade50, Colors.purple, subtitle: "English", isLast: true),
+          _settingTile(context, Icons.calendar_today_outlined, "My Bookings", Colors.green.shade50, Colors.green, onTap: () => Navigator.pushNamed(context, '/my-bookings')),
+          _settingTile(context, Icons.account_balance_wallet_outlined, "Payment Methods", Colors.teal.shade50, Colors.teal, subtitle: "Visa •••• 1234", onTap: () => Navigator.pushNamed(context, '/payment-methods')),
+          _settingTile(context, Icons.bookmark_border, "Saved Addresses", Colors.blue.shade50, Colors.blue, onTap: () => Navigator.pushNamed(context, '/saved-addresses')),
+          _settingTile(context, Icons.notifications_none, "Notifications", Colors.orange.shade50, Colors.orange, isSwitch: true),
+          _settingTile(context, Icons.language, "Language", Colors.purple.shade50, Colors.purple, subtitle: "English", isLast: true, onTap: () => Navigator.pushNamed(context, '/language-settings')),
         ],
       ),
     );
   }
 
-  Widget _buildSupportSection() {
+  Widget _buildSupportSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -102,9 +107,11 @@ class UserProfileScreen extends StatelessWidget {
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: Column(
             children: [
-              _supportTile("Help Center"),
-              _supportTile("Contact Support"),
-              _supportTile("Terms & Privacy Policy", isLast: true),
+              _supportTile(context, "Help Center", onTap: () => Navigator.pushNamed(context, '/help-center')),
+              _supportTile(context, "Contact Support", onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Connecting to support agent...")));
+              }),
+              _supportTile(context, "Terms & Privacy Policy", isLast: true, onTap: () => Navigator.pushNamed(context, '/privacy-policy')),
             ],
           ),
         ),
@@ -112,10 +119,13 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _settingTile(IconData icon, String title, Color bg, Color iconColor, {String? subtitle, bool isSwitch = false, bool isLast = false}) {
+  Widget _settingTile(BuildContext context, IconData icon, String title, Color bg, Color iconColor, {String? subtitle, bool isSwitch = false, bool isLast = false, VoidCallback? onTap}) {
     return Column(
       children: [
         ListTile(
+          onTap: onTap ?? () {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$title settings coming soon!")));
+          },
           leading: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(10)),
@@ -124,7 +134,9 @@ class UserProfileScreen extends StatelessWidget {
           title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
           subtitle: subtitle != null ? Text(subtitle) : null,
           trailing: isSwitch 
-            ? Switch(value: true, onChanged: (v){}, activeThumbColor: primaryGreen) 
+            ? Switch(value: true, onChanged: (v){
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Notification toggle coming soon!")));
+              }, activeThumbColor: primaryGreen) 
             : const Icon(Icons.chevron_right, color: Colors.grey),
         ),
         if (!isLast) const Divider(height: 1, indent: 70),
@@ -132,10 +144,13 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _supportTile(String title, {bool isLast = false}) {
+  Widget _supportTile(BuildContext context, String title, {bool isLast = false, VoidCallback? onTap}) {
     return Column(
       children: [
         ListTile(
+          onTap: onTap ?? () {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$title coming soon!")));
+          },
           title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
           trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         ),

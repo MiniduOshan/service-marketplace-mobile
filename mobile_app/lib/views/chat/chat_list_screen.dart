@@ -1,10 +1,48 @@
 import 'package:flutter/material.dart';
 import 'chat_screen.dart';
 
-class ChatListScreen extends StatelessWidget {
+class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
 
+  @override
+  State<ChatListScreen> createState() => _ChatListScreenState();
+}
+
+class _ChatListScreenState extends State<ChatListScreen> {
   static const Color primaryGreen = Color(0xFF006D44);
+  
+  bool _isSearching = false;
+  final TextEditingController _searchController = TextEditingController();
+  
+  final List<Map<String, dynamic>> _allChats = [
+    {"name": "Kasun Silva", "tag": "PAINTER", "msg": "Great! I'll be there at 9 AM...", "time": "10:27 AM", "unread": 2},
+    {"name": "Amara Perera", "tag": "CLEANER", "msg": "Can we reschedule for tomorrow?", "time": "Yesterday", "unread": 0},
+    {"name": "Nuwan Bandara", "tag": "ELECTRICIAN", "msg": "I've fixed the wiring issues.", "time": "2 days ago", "unread": 0},
+    {"name": "Dilini Mendis", "tag": "PLUMBER", "msg": "The tap is working now.", "time": "Mon", "unread": 0},
+    {"name": "Saman Kumara", "tag": "CARPENTER", "msg": "Will send the quote by evening.", "time": "Sun", "unread": 1},
+  ];
+
+  late List<Map<String, dynamic>> _filteredChats;
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredChats = List.from(_allChats);
+  }
+
+  void _filterChats(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        _filteredChats = List.from(_allChats);
+      } else {
+        _filteredChats = _allChats
+            .where((chat) => 
+                chat['name'].toLowerCase().contains(query.toLowerCase()) ||
+                chat['tag'].toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +55,49 @@ class ChatListScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: primaryGreen),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Chats", 
-          style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)),
+        title: _isSearching 
+          ? TextField(
+              controller: _searchController,
+              autofocus: true,
+              onChanged: _filterChats,
+              decoration: const InputDecoration(
+                hintText: "Search chats...",
+                border: InputBorder.none,
+                hintStyle: TextStyle(color: Colors.grey),
+              ),
+              style: const TextStyle(color: primaryGreen),
+            )
+          : const Text("Chats", 
+              style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold)),
         centerTitle: true,
         actions: [
-          IconButton(icon: const Icon(Icons.search, color: primaryGreen), onPressed: () {}),
+          IconButton(
+            icon: Icon(_isSearching ? Icons.close : Icons.search, color: primaryGreen), 
+            onPressed: () {
+              setState(() {
+                if (_isSearching) {
+                  _isSearching = false;
+                  _searchController.clear();
+                  _filterChats("");
+                } else {
+                  _isSearching = true;
+                }
+              });
+            }
+          ),
         ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildRecentWorkers(),
+          if (!_isSearching) _buildRecentWorkers(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+            child: Text(
+              _isSearching ? "Search Results (${_filteredChats.length})" : "All Messages",
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey),
+            ),
+          ),
           Expanded(child: _buildChatList(context)),
         ],
       ),
@@ -54,7 +124,8 @@ class ChatListScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               itemCount: 5,
               itemBuilder: (context, index) {
-                return _recentWorkerAvatar("Kasun"); // Placeholder names
+                final names = ["Kasun", "Amara", "Nuwan", "Dilini", "Saman"];
+                return _recentWorkerAvatar(names[index % names.length]);
               },
             ),
           ),
@@ -91,18 +162,24 @@ class ChatListScreen extends StatelessWidget {
   }
 
   Widget _buildChatList(BuildContext context) {
+    if (_filteredChats.isEmpty) {
+      return const Center(
+        child: Text("No conversations found", style: TextStyle(color: Colors.grey)),
+      );
+    }
     return ListView.separated(
       padding: const EdgeInsets.only(top: 10),
-      itemCount: 4,
+      itemCount: _filteredChats.length,
       separatorBuilder: (context, index) => const Divider(height: 1, indent: 90),
       itemBuilder: (context, index) {
+        final chat = _filteredChats[index];
         return _chatTile(
           context,
-          "Kasun Silva",
-          "PAINTER",
-          "Great! I'll be there at 9 AM...",
-          "10:27 AM",
-          unreadCount: index == 0 ? 2 : 0,
+          chat['name'],
+          chat['tag'],
+          chat['msg'],
+          chat['time'],
+          unreadCount: chat['unread'],
         );
       },
     );
@@ -145,4 +222,4 @@ class ChatListScreen extends StatelessWidget {
       child: Text(text, style: const TextStyle(color: Color(0xFF3B82F6), fontSize: 10, fontWeight: FontWeight.bold)),
     );
   }
-}
+}

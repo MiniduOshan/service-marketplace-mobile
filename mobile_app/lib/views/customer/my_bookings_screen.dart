@@ -147,7 +147,7 @@ class MyBookingsScreen extends StatelessWidget {
               const Text("#BK-1041", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
               const CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage('https://placeholder.com/100'), // Replace with image_11.png
+                backgroundImage: NetworkImage('https://i.pravatar.cc/100?u=worker'), 
               ),
             ],
           ),

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class Category {
   final String name;
   final IconData iconData; 
-  Category({required this.name, required this.iconData});
+  final Color color;
+  Category({required this.name, required this.iconData, required this.color});
 }
 
 class Worker {
